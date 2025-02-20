@@ -1,13 +1,13 @@
 import torch
-import torch.nn as nn
 import torch.optim as optim
-from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
+from torchvision import transforms, datasets
+import os
 import matplotlib.pyplot as plt
 from PIL import Image
 from tqdm import tqdm
 
-from util import SmallCNN, explore_dataset, train_model, get_cam
+# from util import SmallCNN, explore_dataset, train_model, get_cam
 
 # Define the dataset directory
 data_dir = 'data/train'
@@ -35,16 +35,32 @@ test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
 # Initialize the model, loss function, and optimizer
 model = SmallCNN(num_classes=len(categories))
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# Train the model
-num_epochs = 10
+# Check if GPU is available and use it
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-train_model(model, train_loader, criterion, optimizer, num_epochs, device)
+model.to(device)
+
+# Load model if it exists
+model_path = 'model.pkl'
+if os.path.exists(model_path):
+    model.load_state_dict(torch.load(model_path))
+    print("Model loaded from model.pkl")
+else:
+    print("Model not found, starting fresh.")
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    # Train the model
+    num_epochs = 10
+    train_model(model, train_loader, criterion, optimizer, num_epochs, device)
+
+    # Save the trained model
+    torch.save(model.state_dict(), model_path)
+    print(f"Model saved to {model_path}")
 
 # Load and preprocess an image for CAM visualization
-img_path = 'data/test/some_category/example_image.jpg'
+img_path = 'data/test/beach/beach01.jpg'
 img = Image.open(img_path).convert('RGB')
 img_tensor = transform(img).unsqueeze(0).to(device)
 
@@ -55,7 +71,7 @@ with torch.no_grad():
 
 # Generate CAM
 print("Generating Class Activation Map...")
-cam = get_cam(model, img_tensor, predicted_class.item())
+cam = get_cam(model, img_tensor, predicted_class.item(), device)
 
 # Visualize the original image and CAM
 plt.figure(figsize=(10, 5))
