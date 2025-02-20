@@ -17,7 +17,7 @@ The main objectives are:
 
 Loss curve:
 
-![LossCurve](plots/loss.jpg)
+![LossCurve](Loss.png)
 
 Here, we visualize the model's training loss over the course of the epochs. The loss generally decreases as training progresses, indicating that the model is learning to classify the images more accurately.
 
