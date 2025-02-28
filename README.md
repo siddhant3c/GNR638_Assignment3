@@ -47,6 +47,6 @@ During the testing phase, the model is able to predict the land use class of a g
 - **Original Image**:
   ![Original Image](image.png)
 - **Class Activation Map**:
-  ![CAM](Output.png)
+  ![CAM](output.png)
 
 This helps in understanding which regions of the image the model is focusing on while making predictions.
