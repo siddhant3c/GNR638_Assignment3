@@ -44,7 +44,9 @@ Here, we visualize the model's training loss over the course of the epochs. The 
 
 During the testing phase, the model is able to predict the land use class of a given image. Here’s an example of visualizing the prediction and the corresponding Class Activation Map (CAM), which highlights the regions of the image that are most influential for the model’s decision.
 
-- **Original Image**: (Show an image from the dataset)
-- **Class Activation Map**: (Overlay the CAM on the image)
+- **Original Image**:
+  ![Original Image](image.png)
+- **Class Activation Map**:
+  ![CAM](Output.png)
 
-This helps in understanding which regions of the image the model is focusing on while making predictions. For example, in the case of a beach image, the model might focus on the sand and water areas as these are key indicators for the class.
+This helps in understanding which regions of the image the model is focusing on while making predictions.
